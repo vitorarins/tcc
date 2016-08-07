@@ -1,0 +1,90 @@
+\chapter{Proposta de experimento}
+
+Para realizar o experimento será necessário treinar um modelo de rede
+neural que seja capaz, ou esteja próximo, de decifrar um CAPTCHA. Para
+isso serão efetuadas três etapas básicas e comuns quando se trabalha
+com redes neurais. Primeiro será coletado o maior número possível de
+imagens de CAPTCHA. Em seguida será gerado um dataset com as
+características dessas imagens junto com a classe em que pertence. A
+partir daí podemos realizar a configuração e treinamento da rede
+neural. E por fim será testada a acurácia do modelo mediante imagens
+de teste.
+
+\section{Coleta de imagens}
+
+A coleta de imagens será feita através de um script em Python que irá
+acessar a página que possui uma imagem de CAPTCHA e assim fazer o
+download da mesma. O script ficará em loop até que seja feita a coleta
+de um número suficiente de imagens.
+
+\section{Geração do Conjunto de dados}
+
+Para criar os arquivos de conjunto de dados (ou ``dataset''), será
+necessário utilizar o formato de arquivo {\bf HDF}, mais
+especificamente a versão 5 (HDF5). O formato de arquivo de dados
+hierárquico possibilita a manipulação de conjuntos de dados
+extremamente grandes e complexos.
+
+\subsection{Pré-processamento}
+
+A fase de pré-processamento das imagens é mínima e é feita em tempo de
+execução da geração do conjunto de dados.
+
+\begin{itemize}
+\item{\bf Escala de cinza}
+
+Ao gerar um array representativo da imagem, apenas é considerado um
+valor de escala de cinza da imagem, assim padronizando os valores de
+intensidade de pixels entre 0 e 1.
+
+\item{\bf Redimensionamento}
+
+Ao gerar o array que representa a imagem, é feito um cálculo para
+diminuir a imagem com base em uma escala. Essa escala será configurada
+à partir de um valor padrão para a largura e altura das imagens.
+
+\end{itemize}
+
+\subsection{Conjunto de dados de teste}
+
+Para o treinamento será necessário um conjunto separado para teste que
+não possui nenhuma imagem presente no conjunto de treinamento. Para
+isso será coletada uma amostra aleatória com cerca de 2\% do número de
+imagens do conjunto de treinamento para geração do conjunto de dados
+de teste.
+
+\section{Treinamento}
+
+Após gerado um arquivo contendo o conjunto de dados, é possível
+trabalhar no treinamento do modelo da rede neural. Para isso será
+usado o Framework {\bf TensorFlow}\cite{TensorFlow} destinado à
+\textit{Deep Learning} e um script em Python que fará uso das funções
+disponibilizadas pela biblioteca do TensorFlow. Assim realizando o
+treinamento até atingir um valor aceitável de acerto no conjunto de
+teste. O resultado do treinamento será um arquivo binário
+representando o modelo que será utilizado para avaliação
+posteriormente.
+
+\subsection{Infraestrutura}
+
+Com o intuito de acelerar o processo, foi utilizada uma
+máquina com {\bf GPU} para o treinamento. A máquina foi adquirida em
+uma \textit{Cloud} privada da AWS. A GPU utilizada se trata de uma
+\textit{NVIDIA GRID K520} com 1.536 cores e 4GB de memória de vídeo. Como
+processador a máquina possui um \textit{Intel Xeon E5-2670 (Sandy
+  Bridge)} com 8 cores, e ainda possui 15GB de memória RAM
+\cite{AWSGPU}\cite{GPUinstance}.
+
+\section{Avaliação de acurácia}
+
+Para a avaliação, uma nova amostra de imagens será coletada do mesmo
+modo que foram coletadas as imagens para treinamento. Essa amostra
+terá uma quantidade maior de imagens do que o conjunto de teste.
+
+Com essas amostra de imagens, será feita a execução do teste do modelo
+contra cada uma das imagens, assim armazenando uma informação de erro
+ou acerto do modelo. Ao final da execução será contabilizado o número
+de acertos e comparado com o número total da amostra de imagens para
+avaliação. Resultando assim em uma porcentagem que representa a
+acurácia do modelo gerado.
+
