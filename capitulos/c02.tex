@@ -92,7 +92,7 @@ comuns. De acordo com Karpathy\cite{Karpathy}:
   entradas são imagens, o que nos permite cifrar algumas propriedades
   dentro da arquitetura. Essas então fazem a função de ativação mais
   eficiente de implementar e reduz drasticamente a quantidade de
-  parâmetros na rede.'' (KARPATHY\cite{Karpathy}, 2015, tradução nossa).
+  parâmetros na rede.'' (KARPATHY, 2015, tradução nossa).
 \end{quote}
 
 Portanto para o caso de reconhecimento de texto em imagens, as redes
@@ -119,6 +119,11 @@ Aprendizado em profundidade\cite{Goodfellow-et-al-2016-Book}.
 
 \section{Redes neurais convolucionais de profundidade}
 
+Ao combinar o aprendizado em profundidade com redes convolucionais,
+conseguimos tratar problemas muito mais complexos de classificação em
+imagens. Assim problemas mais simples, como o reconhecimento de
+textos, podem ser resolvidos cada vez mais rápido e facilmente.
+
 A grande vantagem na abordagem de redes neurais convolucionais de
 profundidade (DCNN) para reconhecimento é que não é necessário um
 extrator de características desenvolvido por um ser humano. Nas
@@ -138,11 +143,10 @@ aprendizado ficar muito mais rápido.
 \label{fig:activation_funcs}
 \end{figure}
 
-Ao combinar o aprendizado em profundidade com redes convolucionais,
-conseguimos tratar problemas muito mais complexos de classificação em
-imagens. Assim problemas mais simples, como o reconhecimento de
-textos, podem ser resolvidos cada vez mais rápido e facilmente.
-
-
-
-Citar Jaderberg\cite{Jaderberg}
+DCNNs são a primeira abordagem verdadeiramente bem sucedida em
+aprendizado em profundidade onde muitas camadas de uma hierarquia são
+treinadas com sucesso de uma maneira robusta. Uma DCNN é uma escolha
+de topologia ou arquitetura que se aproveita de relações espaciais
+para reduzir o número de parâmetros que devem ser aprendidos, e assim
+melhora o treinamento diante de uma rede com \textit{feed-forward
+  backpropagation}\cite{Arel2010}.
