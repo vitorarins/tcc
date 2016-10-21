@@ -33,8 +33,8 @@ parâmetros:
 
   \item Número de imagens que deve ser lido do disco.
   \item Diretório onde as imagens estão disponíveis.
-  \item Número de classes que um caractér pode ter. Para o caso do
-    trabalho esse número é igual a 36 pois cada caractér do CAPTCHA
+  \item Número de classes que um caractere pode ter. Para o caso do
+    trabalho esse número é igual a 36 pois cada caractere do CAPTCHA
     utilizado como exemplo pode ser somente uma letra minúscula sem
     acentos de ``a'' à ``z'' (26 letras) ou um número de ``0'' à ``9''
     (10 dígitos).
@@ -57,20 +57,20 @@ para a utilização no treinamento. Como as imagens já estão nomeadas
 com o respectivo conteúdo da sua imagem, só o que precisamos fazer é
 um vetor utilizável desse texto. 
 
-Primeiro transformamos cada caractér em um número de 0 à 35. Fazemos
-isso recuperando o código ASCII de cada caractér e normalizando a
+Primeiro transformamos cada caractere em um número de 0 à 35. Fazemos
+isso recuperando o código ASCII de cada caractere e normalizando a
 sequência. Portanto, para os dígitos (0 à 9) que possuem códigos indo
 de 48 à 57, subtraímos 48. E para as letras (a à z) que possuem
 códigos indo de 97 à 122, subtraímos 87 e ficamos com números de 10 à
 35. 
 
-Depois de traduzido o caractér para um número, precisamos criar o
+Depois de traduzido o caractere para um número, precisamos criar o
 vetor do rótulo através do nosso algoritmo de \textit{One-hot
-  encoding}. Para isso criamos 5 vetores, um para cada caractér da
+  encoding}. Para isso criamos 5 vetores, um para cada caractere da
 imagem, e cada vetor possui 36 posições. Completamos todas as posições
 com 0 e em seguida é atribuído o número 1 para a posição referente ao
-carctér. A posição do caractér foi determinada pelo passo anterior,
-sendo igual o número correspondente ao caractér.
+carctér. A posição do caractere foi determinada pelo passo anterior,
+sendo igual o número correspondente ao caractere.
 
 \subsubsection{Fraçao dos dados para treinamento}
 
@@ -94,7 +94,7 @@ maior como veremos a seguir.
 
 \subsubsection{Quantidade de canais de cor}
 
-No contexto do trabalho, não nos importamos com a cor de um caractér
+No contexto do trabalho, não nos importamos com a cor de um caractere
 da imagem. Uma letra ``A'' pode ser vermelha, azul ou verde mas ainda
 terá que ser reconhecido como letra ``A''. Com isso em mente podemos
 reduzir a quantidade de informações que nosso modelo precisa
@@ -128,13 +128,150 @@ para reduzir imagens. Agora com menos dados a ser processados o
 treinamento terá uma velocidade maior.
 
 Ao final da geração de conjunto de dados criamos dois arrays
-multidimencionais com a biblioteca \textit{NumPy}. Um array é das
+multidimensionais com a biblioteca \textit{NumPy}. Um array é das
 imagens e terá a forma $quantidade\_de\_imagens\ x\ 88\ x\ 24\ x\ 1$,
 sendo a quantidade fornecida como parâmetro, 88 x 24 a largura e
 altura da imagem, e 1 é nossa quantidade de canais de cor (ou
 profundidade). O outro array é para os rótulos e terá a forma
 $quantidade\_de\_imagens\ x\ 180$, sendo a quantidade fornecida como
 parâmetro e 180 o tamanho do vetor do rótulo pois se trata de 36
-classes possíveis multiplicado por 5 caractéres.
+classes possíveis multiplicado por 5 caracteres.
 
-\section{Construção da rede neural}
+\section{Arquitetura da rede neural}
+
+Para a construção e treinamento da rede neural foi implementado um
+script em \textit{Python} que possui toda a arquitetura da rede
+descrita de forma procedural. O framework \textit{TensorFlow} chama a
+arquitetura dos modelos de \textit{Graph} (ou grafo, em português).
+
+A arquitetura implementada começa com uma camada de entrada, possui 4
+camadas convolucionais, 1 camada completamente conectada e mais uma
+camada completamente conectada de saída com 5 saídas, uma para cada
+caractere da imagem. Entre uma e outra camada convolucional há uma
+camada de ativação (ReLu) e uma camada de \textit{pooling}. Ao final
+da última camada convolucional e antes da camada de saída há uma
+camada de \textit{dropout}, resultando em um total de 14 camadas sendo
+11 visíveis e 3 ocultas.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{imagens/training_graph}
+\caption{Arquitetura geral do modelo de rede neural treinado.}
+\label{fig:gradient_descent}
+\end{figure}
+
+\subsection{Entradas}
+
+Nosso grafo começa com dois parâmetros de entrada, as imagens de
+entrada e os rótulos correspondentes. Para esses parâmetros criamos
+\textit{placeholders} disponibilizados pelo framework. Esses
+\textit{placeholders} inicialmente precisam saber qual tipo dos dados
+serão inseridos e o formato final. O tipo dos dados são os valores
+normalizados dos pixels das imagens portanto serão pontos
+flutuantes. O formato é o que foi definido em nossa classe do conjunto
+dos dados ($quantidade\_de\_imagens\ x\ 88\ x\ 24\ x\ 1$ para as
+imagens e $quantidade\_de\_imagens\ x\ 180$ para os rótulos).
+
+\subsection{Camadas}
+
+Para melhor visualização e compreensão da arquitetura será descrita
+cada camada utilizada por ordem de sequência da entrada até a saída.
+
+\begin{enumerate}
+
+\item Camada de entrada: um array multidimensional de formato
+  {\bf 88x24x1} que será alimentado com os valores da imagem.
+
+\item Camada convolucional (1): tem como entrada a imagem carregada na
+  camada de entrada com {\bf 1} de profundidade. Executa convoluções
+  aplicadas à imagem com um \textit{kernel} de formato $5x5$ e {\bf
+    64} valores de profundidade. Seu valor de \textit{stride} é igual
+  a {\bf 1} e utiliza \textit{same padding}. Por fim é adicionado um
+  \textit{bias} de {\bf 64} valores à convolução. O formato do array
+  multidimensional desta camada é {\bf 88x24x64}.
+
+\item Camada oculta (1): utiliza {\bf ReLU} como função de ativação e
+  não recebe nenhum parâmetro. Tem como entrada a camada convolucional
+  anterior.
+
+\item Camada de \textit{pooling} (1): executa a operação de
+  \textit{max pooling} com um \textit{kernel} de formato $2x2$ e
+  \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
+  imagem gerada pelas convoluções após passar pela função de
+  ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
+  formato do array multidimensional desta camada é {\bf 44x12x64}.
+
+\item Camada convolucional (2): tem como entrada a imagem gerada
+  nas camadas anteriores com {\bf 64} de profundidade. Executa
+  convoluções aplicadas à imagem com um \textit{kernel} de formato
+  $5x5$ e {\bf 128} valores de profundidade. Seu valor de
+  \textit{stride} é igual a {\bf 1} e utiliza \textit{same
+    padding}. Por fim é adicionado um \textit{bias} de {\bf 128}
+  valores à convolução. O formato do array multidimensional desta
+  camada é {\bf 44x12x128}.
+
+\item Camada oculta (2): utiliza {\bf ReLU} como função de ativação e
+  não recebe nenhum parâmetro. Tem como entrada a camada convolucional
+  anterior.
+
+\item Camada de \textit{pooling} (2): executa a operação de
+  \textit{max pooling} com um \textit{kernel} de formato $2x2$ e
+  \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
+  imagem gerada pelas convoluções após passar pela função de
+  ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
+  formato do array multidimensional desta camada é {\bf 22x6x128}.
+
+\item Camada convolucional (3): tem como entrada a imagem gerada
+  nas camadas anteriores com {\bf 128} de profundidade. Executa
+  convoluções aplicadas à imagem com um \textit{kernel} de formato
+  $5x5$ e {\bf 256} valores de profundidade. Seu valor de
+  \textit{stride} é igual a {\bf 1} e utiliza \textit{same
+    padding}. Por fim é adicionado um \textit{bias} de {\bf 256}
+  valores à convolução. O formato do array multidimensional desta
+  camada é {\bf 22x6x256}.
+
+\item Camada oculta (3): utiliza {\bf ReLU} como função de ativação e
+  não recebe nenhum parâmetro. Tem como entrada a camada convolucional
+  anterior.
+
+\item Camada de \textit{pooling} (2): executa a operação de
+  \textit{max pooling} com um \textit{kernel} de formato $2x2$ e
+  \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
+  imagem gerada pelas convoluções após passar pela função de
+  ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
+  formato do array multidimensional desta camada é {\bf 11x3x256}.
+
+\item Camada convolucional (4): tem como entrada a imagem gerada
+  nas camadas anteriores com {\bf 256} de profundidade. Executa
+  convoluções aplicadas à imagem com um \textit{kernel} de formato
+  $3x3$ e {\bf 512} valores de profundidade. Seu valor de
+  \textit{stride} é igual a {\bf 1} e utiliza \textit{same
+    padding}. Por fim é adicionado um \textit{bias} de {\bf 512}
+  valores à convolução. O formato do array multidimensional desta
+  camada é {\bf 11x3x512}.
+
+\item Camada de \textit{dropout}: tem como entrada a camada
+  convolucional anterior e possui um formato {\bf 11x3x512}. Recebe o
+  valor de {\bf 0.75} como parâmetro de probabilidade de manter cada
+  peso da rede neural.
+
+\item Camada completamente conectada: tem como entrada todas as
+  ativações das camadas anteriores. Para habilitar nossa camada
+  completamente conectada precisamos realizar uma reformatação na
+  matriz de entrada. Como a última camada possui um formato de {\bf
+    11x3x512}, multiplica-se esses valores para que ao invés de
+  ter uma matriz, tenha-se um vetor de tamanho {\bf 16896} como
+  entrada. Assim nossa camada completamente conectada terá {\bf 16896}
+  ativações de entrada e {\bf 4096} ativações de saída.
+
+\item Camadas completamente conectadas de saída: cada camada terá como
+  entrada as {\bf 4096} ativações da camada anterior. E cada saída
+  será um vetor de {\bf 36} posições que corresponde às probabilidades
+  de classe para cada caractere. No total serão 5 camadas paralelas
+  agregadas em uma.
+
+\end{enumerate}
+
+Os números de ativações nas saídas das camadas (64, 128, 256, 512 e
+4096) foram utilizados com base em estudos anteriores feitos sobre
+redes convolucionais\cite{Krizhevsky}.
