@@ -12,23 +12,50 @@ de teste.
 
 \section{Coleta de imagens}
 
-A coleta de imagens será feita através de um script em Python que irá
-acessar a página que possui uma imagem de CAPTCHA e assim fazer o
-download da mesma. O script ficará em loop até que seja feita a coleta
-de um número suficiente de imagens.
+Como o escopo do trabalho não contempla a automatização da recuperação
+de informações de websites públicos, foi disponibilizado um
+repositório com as imagens necessárias. Esse repositório possui
+188.564 imagens e foi disponibilizado pela empresa Neoway. As imagens
+se tratam de um CAPTCHA publicado pelo site do SINTEGRA de Santa
+catarina
+(\url{http://sistemas3.sef.sc.gov.br/sintegra/consulta_empresa_pesquisa.aspx}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1]{imagens/exemplo_captcha}
+\caption{Um exemplo do CAPTCHA utilizado pelo sistema de consulta do
+  SINTEGRA de Santa Catarina.}
+\label{fig:gradient_descent}
+\end{figure}
+
+
+\subsection{Fonte pública}
+
+Para demonstrar a ineficiência de certas imagens de CAPTCHA foi
+escolhido um software Web. Este software do SINTEGRA, fornece dados
+públicos de contribuintes mediante consulta via website. O SINTEGRA é
+o Sistema Integrado de Informações sobre Operações Interestaduais com
+Mercadorias e Serviçoes. Esta fonte pública possui dados fornecidos
+pelos próprios contribuintes na hora do cadastro. Os comerciantes ou
+profissionais autônomos fazem seu cadastro para facilitar o comércio
+de produtos e prestação de serviços. O cadastro contempla inscrição da
+pessoa física ou jurídica, endereço e informações complementares
+referentes ao fisco estadual.
 
 \section{Geração do Conjunto de dados}
 
-Para criar os arquivos de conjunto de dados (ou ``dataset''), será
-necessário utilizar o formato de arquivo {\bf HDF}, mais
-especificamente a versão 5 (HDF5). O formato de arquivo de dados
-hierárquico possibilita a manipulação de conjuntos de dados
-extremamente grandes e complexos.
+O conjunto de dados (ou ``dataset'') que alimenta a rede neural é
+gerado em tempo de execução do treinamento. Cada imagem é lida de seu
+diretório em disco e carregada na memória como uma matriz de valores
+de pixel. Ao final deste processo há um vetor em memória com todas
+imagens existentes já pré-processadas. Isso é feito para o dataset de
+treinamento e de teste. O dataset de treinamento terá a maioria das
+imagens, portanto {\bf 180 mil}.
 
 \subsection{Pré-processamento}
 
-A fase de pré-processamento das imagens é mínima e é feita em tempo de
-execução da geração do conjunto de dados.
+A fase de pré-processamento das imagens é mínima e é feita junto com a
+geração do conjunto de dados.
 
 \begin{itemize}
 \item{\bf Escala de cinza}
@@ -48,32 +75,53 @@ diminuir a imagem com base em uma escala. Essa escala será configurada
 \subsection{Conjunto de dados de teste}
 
 Para o treinamento será necessário um conjunto separado para teste que
-não possui nenhuma imagem presente no conjunto de treinamento. Para
-isso será coletada uma amostra aleatória com cerca de 2\% do número de
-imagens do conjunto de treinamento para geração do conjunto de dados
-de teste.
+não possui nenhuma imagem presente no conjunto de treinamento.
+O dataset de testes terá uma amostra bem menor que o conjunto de
+treinamento. Portanto terá {\bf 8 mil} imagens.
 
 \section{Treinamento}
 
-Após gerado um arquivo contendo o conjunto de dados, é possível
-trabalhar no treinamento do modelo da rede neural. Para isso será
-usado o Framework {\bf TensorFlow}\cite{TensorFlow} destinado à
-\textit{Deep Learning} e um script em Python que fará uso das funções
-disponibilizadas pela biblioteca do TensorFlow. Assim realizando o
-treinamento até atingir um valor aceitável de acerto no conjunto de
-teste. O resultado do treinamento será um arquivo binário
-representando o modelo que será utilizado para avaliação
-posteriormente.
+Após gerado o conjunto de dados, é possível trabalhar no treinamento
+do modelo da rede neural. Para isso será usado o Framework {\bf
+  TensorFlow}\cite{TensorFlow} destinado à \textit{Deep Learning} e um
+script em Python que fará uso das funções disponibilizadas pela
+biblioteca do TensorFlow. Assim realizando o treinamento até atingir
+um valor aceitável de acerto no conjunto de teste. O resultado do
+treinamento será um arquivo binário representando o modelo que será
+utilizado para avaliação posteriormente.
 
 \subsection{Infraestrutura}
 
 Com o intuito de acelerar o processo, foi utilizada uma
 máquina com {\bf GPU} para o treinamento. A máquina foi adquirida em
 uma \textit{Cloud} privada da AWS. A GPU utilizada se trata de uma
-\textit{NVIDIA GRID K520} com 1.536 cores e 4GB de memória de vídeo. Como
-processador a máquina possui um \textit{Intel Xeon E5-2670 (Sandy
-  Bridge)} com 8 cores, e ainda possui 15GB de memória RAM
-\cite{AWSGPU}\cite{GPUinstance}.
+\textit{NVIDIA K80} com 2.496 cores e 12GB de memória de vídeo. Como
+processador a máquina possui um \textit{Intel Xeon E5-2686v4
+  (Broadwell)} com 4 cores, e ainda possui 61GB de memória RAM
+\cite{GPUinstance}.
+
+\subsection{Bibliotecas utilizadas}
+
+Todo o código foi implementado utilizando a linguagem de programação
+{\bf \emph{Python}}, e as seguintes bibliotecas foram utilizadas:
+
+\begin{itemize}
+
+\item {\bf TensorFlow}\cite{TensorFlow}: Um Framework implementado em
+  \textit{Python} destinado à \textit{Deep Learning}. Proporciona a criação da
+  arquitetura e automatização do processo de treinamento de redes
+  neurais com \textit{backpropagation}.
+
+\item {\bf NumPy}\cite{NumPy}: Uma biblioteca em \textit{Python}
+  criada para computação científica. Possui um objeto de
+  \textit{array} com várias dimensões e várias funções sofisticadas
+  para cálculos com algebra linear.
+
+\item {\bf OpenCV}\cite{OpenCV}: Uma biblioteca, implementada em
+  C/C++, destinada à computação visual. Utilizada para ler imagens em
+  disco e realizar o pré-processamento nas mesmas.
+
+\end{itemize}
 
 \section{Avaliação de acurácia}
 
