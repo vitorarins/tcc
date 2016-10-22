@@ -10,14 +10,16 @@ reconhecedor textos do trabalho.
 
 \section{Código fonte utilizado como base}
 
-Como base da implementação deste trabalho, foi utilizado um exemplo
-de código aberto disponível no repositório de códigos do
-\textit{TensorFlow}\cite{mnistCode}. O código em questão seria para
-reconhecer os dígitos da base dados MNIST\cite{mnist}.
+Como base da implementação deste trabalho, foram utilizados exemplos
+de código aberto disponíveis no repositório de códigos do
+\textit{TensorFlow}\cite{tensorCode}. No repositório há diversos
+tutoriais e exemplos que incentivam o auto aprendizado dos
+usuários. Um dos exemplos mais conhecido entre a comunidade é o
+reconhecedor de dígitos da base dados MNIST\cite{mnist}.
 
 O reconhecedor utilizado como base funciona apenas para dígitos
-isolados em imagens separadas. Para o caso do trabalho em questões
-precisaremos adaptá-lo para reconhecer conjuntos com 5 dígitos ou
+isolados em imagens separadas. Para o caso do trabalho em questão
+foi necessário adaptá-lo para reconhecer conjuntos com 5 dígitos ou
 letras em uma mesma imagem sem passar por um processo de segmentação
 antes do treinamento.
 
@@ -272,6 +274,98 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
 
 \end{enumerate}
 
-Os números de ativações (64, 128, 256, 512 e 4096) nas saídas das
+\section{Configuração da rede neural}
+
+Parâmetros fornecidos para a configuração do treinamento da rede
+neural são chamados de {\bf hiperparâmetros}. Dependendo da
+arquitetura utilizada, uma rede neural pode ter uma quantidade
+diferente de hiperparâmetros. A maioria dos hiperparâmetros utilizados
+no trabalho foram indicados artigos e trabalhos publicados sobre redes
+neurais convolucionais. Outro fator levado em consideração é a
+experiência do autor em relação ao tema em outras ocasiões.
+
+\subsection{Quantidade de ativações}
+
+Os números de ativações 64, 128, 256, 512 e 4096 nas saídas das
 camadas foram utilizados com base em estudos anteriores feitos sobre
 redes convolucionais\cite{Krizhevsky}.
+
+\subsection{Tamanho do Kernel}
+
+Baseado nos estudos de \cite{Goodfellow}, foi escolhido um formato
+de $5x5$ para o tamanho do \textit{kernel} para a maioria das
+camadas. Para a última camada convolucional foi escolhido o tamanho
+de $3x3$ pois o \textit{kernel} não pode ter uma dimensão maior que
+a imagem de entrada. Como na última camada recebemos uma imagem no
+formato $11x3$, não é possivel aplicar convoluções de tamanho $5x5$.
+
+\subsection{Parâmetros do declínio exponencial da taxa de aprendizado}
+
+Ao utilizar uma taxa de aprendizado decadente no otimizador, são
+fornecidos alguns parâmetros relativos ao processo de decadência da
+taxa. Os valores fornecidos tem como base um dos treinamentos de rede
+neural disponível em \cite{tensorCode}.
+
+\begin{itemize}
+  
+  \item {\bf taxa de aprendizado inicial
+      (\emph{initial\_learning\_rate}):} é fornecido um valor de
+    {\bf 0,01} para a taxa de aprendizado no início do treinamento.
+
+  \item {\bf passos para decair (\emph{decay\_steps}):} valor que
+    indica a cada quantos passos a taxa de aprendizado deve
+    diminuir. Esse valor é de {\bf 1.000} passos para o caso do
+    trabalho.
+
+  \item {\bf taxa de decadência (\emph{decay\_rate}):} valor referente
+    ao quanto a taxa de aprendizado deve decair. Foi escolhido {\bf
+      0,9} para o caso do trabalho, portanto a taxa de aprendizado vai
+    cair 10\% a cada 1.000 passos do treinamento.
+
+\end{itemize}
+
+\subsection{Momentum}
+
+A estratégia de \textit{momentum} de nosso treinamento precisa de uma
+variável que será o fator determinante para o cálculo do gradiente. O
+valor dessa variável recomendado pela maioria dos estudos e exemplos é
+igual a {\bf 0,9} e é o valor utilizado no treinamento proposto.
+
+\subsection{Regularização com $L_2$}
+
+Como foi dito no capítulo de fundamentação teórica, um parâmetro de
+regularização pode ser adicionado a perda do treinamento. Além da
+norma $L_2$ calculada baseada nos pesos, esse valor é multiplicado por
+uma variável $\beta$ que tem valor igual a {\bf 0,0003} para o
+treinamento feito neste trabalho.
+
+\subsection{Probabilidade do Dropout}
+
+Cada valor das ativações terá uma probabilidade de ser mantido ou
+não. Como já foi contemplado na explicação do \textit{dropout}, cada
+ativação pode ser removida entre uma camada e outra. Para os
+treinamentos realizados, foram utilizados dois valores como
+tentativa. O primeiro valor foi de {\bf 0,75} e o segundo foi {\bf
+  0,5}, isso dá 75\% e 50\% das ativações mantidas respectivamente. O
+segundo valor foi empregado na tentativa de minimizar o problema de
+\textit{overfitting}.
+
+\subsection{Tamanho da carga em cada passo}
+
+Na otimização com SGD é fornecido um pedaço do conjunto de dados
+total em cada passo que calcula-se o método do gradiente. Este pedaço
+dos dados será chamado de ``carga'' (ou \textit{batch} em inglês) para
+o presente contexto. Baseado em exemplos anteriores, foi escolhido um
+valor de {\bf 64} imagens para o tamanho de carga.
+
+\subsection{Número de iterações}
+
+O número de iterações consiste basicamente na quantidade de exemplos
+que será calculado o gradiente. Este número leva em consideração o
+tamanho da carga e dá o resultado do número de passos que serão
+executados no treinamento. Para os treinamentos realizados neste
+trabalho foram escolhidos dois valores, um com {\bf 200 mil} iterações
+outro com {\bf 500 mil} iterações. Portanto para um treinamento
+haverá {\bf 3.125} ($200.000 / 64$) passos e para os outros haverá
+{\bf 7.812} ($500.000 / 64$) passos.
+

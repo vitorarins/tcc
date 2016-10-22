@@ -104,6 +104,31 @@ matriz e o \textit{bias} é onde age o aprendizado de máquina, ou seja,
 \textit{bias} que terão uma boa performance em fazer predições para as
 entradas.
 
+\subsection{Inicialização de pesos Xavier}
+
+Uma tarefa crucial para o sucesso na construção de redes neurais é a
+inicialização da matriz de pesos. Geralmente os pesos são
+inicializados de maneira aleatória. No caso do trabalho proposto,
+os valores serão inicializados de forma aleatória seguindo uma regra
+de distribuição, utilizando a inicialização de Xavier\cite{Glorot}.
+
+Se os pesos forem inicializados com um valor muito baixo, é capaz que
+as ativações da rede neural diminuam ao passar por cada camada. Já com
+uma inicialização de valores muito altos para o peso, as ativações
+podem acabar crescendo demais ao longo das camadas. A inicialização de
+Xavier garante que os pesos serão inicializados na ``medida certa'',
+mantendo as ativações em uma variação razoável de valores mediante
+várias camadas da rede neural. A distribuição segue a seguinte
+fórmula:
+
+\begin{equation}
+  Var(W) = \frac{2}{n_{in}+n_{out}}
+\end{equation}
+
+Onde $W$ é a distribuição da inicialização para o peso em questão,
+$n_{in}$ é o número de neurônios de entrada, e $n_{out}$ é o número de
+neurônios de saída.
+
 \subsection{Função Softmax}
 
 Como cada imagem pode ter um e somente um rótulo possível, é necessário
@@ -309,7 +334,7 @@ Como foi dito anteriormente, em cada etapa do processo de treinamento
   taxa de aprendizado} é o parâmetro que diz o quão pequeno é esse
 passo. Existe uma área inteira de pesquisa sobre essa taxa, e os
 melhores resultados indicam que é mais apropriado decair a taxa de
-aprendizado em ao longo do treinamento. Neste trabalho iremos aplicar
+aprendizado ao longo do treinamento. Neste trabalho iremos aplicar
 um declínio exponencial à taxa de aprendizado.\cite{Zeiler}
 
 \subsection{ReLU}
