@@ -1,1 +1,77 @@
-\chapter{Conclusões}
+\chapter{ Conclusões }
+
+Para desenvolver o projeto foi escolhido o software que até a presente
+data é o mais recomendado para tarefas de aprendizado de máquina. Um
+reconhecedor de texto em imagens de CAPTCHA foi desenvolvido ao longo
+do trabalho. Este reconhecedor conta com um alto nível de robustez
+diante dos testes realizados.
+
+Os testes realizados em todos os casos mostraram ser possível atingir um
+resultado razoável na tarefa de reconhecimento de textos em imagens,
+isso com poucos ajustes à configuração de treinamento de redes
+neurais. Atualmente a quantidade de exemplos e tutoriais disponíveis
+para tarefas de aprendizado de máquina é imenso. Fica claro que é
+possível implementar classificadores mesmo com poucos recursos.
+
+\section{Vulnerabilidade de fontes públicas}
+
+Diante do objetivo alcançado pelo trabalho, fica aparente que fontes
+públicas de dados podem estar vulneráveis. Consultas automatizadas
+realizadas por \textit{Web crawlers} podem não afetar diretamente a
+segurança das informações, isso porque as informações já estão sendo
+disponibilizadas publicamente. Entretanto a disponibilidade de tais
+fontes pode ser afetada quando o ambiente de um \textit{website} não
+está preparado para um volume muito grande de consultas.
+
+\subsection{Eficácia de CAPTCHAs}
+
+Enquanto é possível discutir a eficácia dessas imagens de CAPTCHA e
+como gerar imagens mais difíceis, também cabe uma discussão sobre a
+necessidade de imagens na tentativa de bloquear consultas
+automatizadas. Imagens usadas como CAPTCHA geralmente são frustrantes
+para usuários humanos de sistemas de consulta. Ao tentar dificultar o
+reconhecimento de imagens por máquinas, também se dificulta o acesso
+de um usuário comum às informações. Portanto é possível abrir espaço
+para estudos que buscam outras formas de bloqueio de \textit{Web
+  crawlers}. 
+
+Outra alternativa, inclusive mais interessante, seria
+disponibilizar outros tipos de consulta específicos para sistemas de
+terceiros que desejam utilizar dados públicos. Assim um
+\textit{website} de fonte pública de dados poderia continuar a servir
+usuários humanos com robustez e ao mesmo tempo servir usuários
+sistêmicos com um formato mais adequado.
+
+\section{Trabalhos futuros}
+
+Como possíveis trabalhos futuros, cita-se: 
+
+\begin{itemize}
+
+        \item Fazer um melhor uso das informações geradas pelo
+          processo de treinamento para gerar heurísticas mais
+          inteligentes. Um exemplo seria utilizar outros tipos de
+          otimizadores para a função da perda.
+
+        \item Estender o sistema para realizar o reconhecimento de
+          outros tipos de CAPTCHAs.
+
+        \item Estender o sistema para realizar o reconhecimento de
+          tipos de CAPTCHAs que possuem um tamanho de texto variável.
+
+        \item Realizar um estudo sobre \textit{Web crawlers} em fontes
+          públicas que utilizam CAPTCHA utilizando o sistema proposto
+          neste trabalho.
+
+        \item Implementar um sistema de reconhecimento de CAPTCHAs
+          mais avançados que solicitam a classificação de uma cena
+          completa ou identificação de objetos em imagens.
+
+        \item Estudar um artifício mais efetivo para o bloqueio de
+          consultas automatizadas em \textit{websites}.
+
+\end{itemize}
+
+Considera-se de extrema importância a implementação de projetos desse
+tipo pois o mesmo auxilia na compreensão e aplicação de Inteligencia 
+Artificial em casos específicos.

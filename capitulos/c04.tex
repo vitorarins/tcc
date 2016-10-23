@@ -1,14 +1,34 @@
 \chapter{Desenvolvimento}
 
-Este capítulo descreve o desenvolvimento do projeto proposto. O
-projeto é composto da implementação do processador do conjunto de
-dados, da implementação do script que monta e treina a rede neural e
-da configuração da rede neural para otimização dos resultados. No
-início foi utilizado como base um código já existente destinado ao
+Este capítulo descreve o desenvolvimento do projeto proposto. 
+Para a construção e treinamento da rede neural foi implementado um
+script em \textit{Python} que possui toda a arquitetura da rede
+descrita de forma procedural. O framework \textit{TensorFlow} chama a
+arquitetura dos modelos de \textit{Graph} (ou grafo, em português) e o
+treinamento da rede neural é feito em uma \textit{Session}.
+
+O projeto é composto por 5 tarefas de implementação: 
+
+\begin{itemize}
+
+\item Desenvolvimento do leitor processador do conjunto de dados.
+
+\item Desenvolvimento da função que monta a rede neural.
+
+\item Configuração da rede neural para otimização dos resultados.
+
+\item Desenvolvimento da etapa de treinamento da rede neural.
+
+\item Desenvolvimento da etapa de teste e acurácia do modelo da rede
+  neural.
+
+\end{itemize}
+
+No início foi utilizado como base um código já existente destinado ao
 reconhecimento de dígitos em imagens. A partir daí foi construído o
 reconhecedor textos do trabalho.
 
-\section{Código fonte utilizado como base}
+\section{Código fonte utilizado como base} \label{codigoBase}
 
 Como base da implementação deste trabalho, foram utilizados exemplos
 de código aberto disponíveis no repositório de códigos do
@@ -129,22 +149,23 @@ relação da área de pixel (opção \textit{INTER\_AREA} do
 para reduzir imagens. Agora com menos dados a ser processados o
 treinamento terá uma velocidade maior.
 
-Ao final da geração de conjunto de dados criamos dois arrays
-multidimensionais com a biblioteca \textit{NumPy}. Um array é das
+Ao final da geração de conjunto de dados criamos dois \textit{arrays}
+multidimensionais com a biblioteca \textit{NumPy}. Um \textit{array} é das
 imagens e terá a forma $quantidade\_de\_imagens\ x\ 88\ x\ 24\ x\ 1$,
 sendo a quantidade fornecida como parâmetro, 88 x 24 a largura e
 altura da imagem, e 1 é nossa quantidade de canais de cor (ou
-profundidade). O outro array é para os rótulos e terá a forma
+profundidade). O outro \textit{array} é para os rótulos e terá a forma
 $quantidade\_de\_imagens\ x\ 180$, sendo a quantidade fornecida como
 parâmetro e 180 o tamanho do vetor do rótulo pois se trata de 36
 classes possíveis multiplicado por 5 caracteres.
 
 \section{Arquitetura da rede neural}
 
-Para a construção e treinamento da rede neural foi implementado um
-script em \textit{Python} que possui toda a arquitetura da rede
-descrita de forma procedural. O framework \textit{TensorFlow} chama a
-arquitetura dos modelos de \textit{Graph} (ou grafo, em português).
+O desenvolvimento da arquitetura da rede neural foi realizado criando
+a função \textit{ocr\_net}, que é responsável por especificar o grafo
+da rede neural. Essa função irá receber as imagens de entrada, a
+quantidade de pesos em cada camada e a quantidade de \textit{biases}
+para cada camada.
 
 A arquitetura implementada começa com uma camada de entrada, possui 4
 camadas convolucionais, 1 camada completamente conectada e mais uma
@@ -159,7 +180,7 @@ camada de \textit{dropout}, resultando em um total de 14 camadas sendo
 \centering
 \includegraphics[scale=0.4]{imagens/training_graph}
 \caption{Arquitetura geral do modelo de rede neural treinado.}
-\label{fig:gradient_descent}
+\label{fig:training_graph}
 \end{figure}
 
 \subsection{Entradas}
@@ -181,7 +202,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
 
 \begin{enumerate}
 
-\item Camada de entrada: um array multidimensional de formato
+\item Camada de entrada: um \textit{array} multidimensional de formato
   {\bf 88x24x1} que será alimentado com os valores da imagem.
 
 \item Camada convolucional (1): tem como entrada a imagem carregada na
@@ -189,7 +210,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   aplicadas à imagem com um \textit{kernel} de formato $5x5$ e {\bf
     64} valores de profundidade. Seu valor de \textit{stride} é igual
   a {\bf 1} e utiliza \textit{same padding}. Por fim é adicionado um
-  \textit{bias} de {\bf 64} valores à convolução. O formato do array
+  \textit{bias} de {\bf 64} valores à convolução. O formato do \textit{array}
   multidimensional desta camada é {\bf 88x24x64}.
 
 \item Camada oculta (1): utiliza {\bf ReLU} como função de ativação e
@@ -201,7 +222,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
   imagem gerada pelas convoluções após passar pela função de
   ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
-  formato do array multidimensional desta camada é {\bf 44x12x64}.
+  formato do \textit{array} multidimensional desta camada é {\bf 44x12x64}.
 
 \item Camada convolucional (2): tem como entrada a imagem gerada
   nas camadas anteriores com {\bf 64} de profundidade. Executa
@@ -209,7 +230,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   $5x5$ e {\bf 128} valores de profundidade. Seu valor de
   \textit{stride} é igual a {\bf 1} e utiliza \textit{same
     padding}. Por fim é adicionado um \textit{bias} de {\bf 128}
-  valores à convolução. O formato do array multidimensional desta
+  valores à convolução. O formato do \textit{array} multidimensional desta
   camada é {\bf 44x12x128}.
 
 \item Camada oculta (2): utiliza {\bf ReLU} como função de ativação e
@@ -221,7 +242,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
   imagem gerada pelas convoluções após passar pela função de
   ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
-  formato do array multidimensional desta camada é {\bf 22x6x128}.
+  formato do \textit{array} multidimensional desta camada é {\bf 22x6x128}.
 
 \item Camada convolucional (3): tem como entrada a imagem gerada
   nas camadas anteriores com {\bf 128} de profundidade. Executa
@@ -229,7 +250,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   $5x5$ e {\bf 256} valores de profundidade. Seu valor de
   \textit{stride} é igual a {\bf 1} e utiliza \textit{same
     padding}. Por fim é adicionado um \textit{bias} de {\bf 256}
-  valores à convolução. O formato do array multidimensional desta
+  valores à convolução. O formato do \textit{array} multidimensional desta
   camada é {\bf 22x6x256}.
 
 \item Camada oculta (3): utiliza {\bf ReLU} como função de ativação e
@@ -241,7 +262,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
   imagem gerada pelas convoluções após passar pela função de
   ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
-  formato do array multidimensional desta camada é {\bf 11x3x256}.
+  formato do \textit{array} multidimensional desta camada é {\bf 11x3x256}.
 
 \item Camada convolucional (4): tem como entrada a imagem gerada
   nas camadas anteriores com {\bf 256} de profundidade. Executa
@@ -249,7 +270,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   $3x3$ e {\bf 512} valores de profundidade. Seu valor de
   \textit{stride} é igual a {\bf 1} e utiliza \textit{same
     padding}. Por fim é adicionado um \textit{bias} de {\bf 512}
-  valores à convolução. O formato do array multidimensional desta
+  valores à convolução. O formato do \textit{array} multidimensional desta
   camada é {\bf 11x3x512}.
 
 \item Camada de \textit{dropout}: tem como entrada a camada
@@ -280,9 +301,10 @@ Parâmetros fornecidos para a configuração do treinamento da rede
 neural são chamados de {\bf hiperparâmetros}. Dependendo da
 arquitetura utilizada, uma rede neural pode ter uma quantidade
 diferente de hiperparâmetros. A maioria dos hiperparâmetros utilizados
-no trabalho foram indicados artigos e trabalhos publicados sobre redes
-neurais convolucionais. Outro fator levado em consideração é a
-experiência do autor em relação ao tema em outras ocasiões.
+no trabalho foram indicados em artigos citados ao longo da sessão, ou
+vieram dos exemplos e tutoriais citados na seção
+\ref{codigoBase}. Alguns parâmetros foram modificados ao longo dos
+testes.
 
 \subsection{Quantidade de ativações}
 
@@ -368,4 +390,80 @@ trabalho foram escolhidos dois valores, um com {\bf 200 mil} iterações
 outro com {\bf 500 mil} iterações. Portanto para um treinamento
 haverá {\bf 3.125} ($200.000 / 64$) passos e para os outros haverá
 {\bf 7.812} ($500.000 / 64$) passos.
+
+\section{Fase de treinamento} \label{treino}
+
+A fase de treinamento é o momento onde se junta todas as peças da
+arquitetura e configuração da rede neural. Na implementação foi
+criada uma função \textit{train} que é responsável por montar de fato
+o grafo para a rede e utilizar o objeto \textit{Session} do
+\textit{TensorFlow} para o treinamento.
+
+\subsection{Criação da sessão de treinamento}
+
+O desenvolvimento começa com a abertura da sessão de treinamento. Esta
+sessão será destruída ao final das iterações para limpar todas as
+variáveis de treinamento carregadas em memória. Após a abertura da
+sessão é chamada a função \textit{ocr\_net} para que seja instanciada a
+arquitetura da rede neural. Todas as variáveis instanciadas até o
+momento de execução da sessão são apenas espaços reservados, assim
+como os \textit{placeholders} criados para os dados de entrada do
+modelo. Com a arquitetura em mãos será calculada a perda, realizando
+uma soma das perdas para cada caractere de saída da rede neural. Em
+seguida é instanciado o otimizador (\textit{MomentumOptimizer}) e por
+final as predições são agregadas em uma matriz transposta para que
+fiquem com o formato $5x36$ (5 caractéres por 36 classes).
+
+\subsection{Inicialização da sessão de treinamento}
+
+Para inicializar a sessão de treinamento é invocado o método
+\textit{initialize\_all\_variables} para popular os espaços reservados
+das variáveis. Com isso é possível executar a sessão pela primeira vez
+invocando \textit{session.run} passando como parâmetro o retorno de
+\textit{initialize\_all\_variables}.
+
+\subsection{Execução da sessão de treinamento}
+
+Para manter o controle do treinamento é criada uma variável
+\textit{step} que irá manter o estado da quantidade de passos
+executados em cada execução da sessão. Para cada passo é invocado o
+método \textit{next\_batch} da instância da classe \textit{OCR\_data}
+referente ao treinamento. Também será invocado \textit{session.run}
+passando como parâmetro o otimizador e carga de dados através de um
+dicionário chamado \textit{feed\_dict}. Esse dicionário receberá o
+retorno do método \textit{next\_batch} e com isso é possível popular
+os \textit{placeholders} da carga de imagens e de seus respectivos
+rótulos.
+
+Em cada passo executado é calculada a perda para o treinamento. E a
+cada 100 passos é calculada a acurácia para a sessão de treinamento. A
+execução do treinamento fica em ciclos até que o número de passos
+multiplicado pela quantidade de carga (64) seja igual ao número de
+iterações (200 mil ou 500 mil). Ao final de todas as iterações é
+instanciado um \textit{Saver}, o qual fará a escrita das variáveis de
+nosso modelo em um arquivo. Este arquivo será utilizado para a
+avaliação da acurácia em situações reais.
+
+\section{Fase de teste} \label{faseTeste}
+
+A implementação da fase de teste consiste na execução de apenas um
+passo da sessão aberta na seção \ref{treino}. Ao final da otimização
+do modelo, é carregado o conjunto de imagens para teste, assim como os
+respectivos rótulos. A carga é feita utilizando o método
+\textit{next\_batch} da instância da classe \textit{OCR\_data}
+referente ao teste. Com isso é possível popular o dicionário
+\textit{feed\_dict} da sessão de teste e executar \textit{session.run}
+com este parâmetro. Ao final teremos o valor da acurácia e da perda
+para o conjunto de dados do teste.
+
+\subsection{Acurácia}
+
+O cálculo da acurácia para o modelo é o mesmo tanto para a fase de
+treinamento quanto para fase de teste. A função de acurácia recebe
+como parâmetro a matriz de predições gerada pelo modelo e a matriz de
+rótulos fornecida pela carga dos dados. O cálculo é feito armazenando o
+maior valor de cada \textit{array} da matriz de predições e comparando
+as posições desses valores com as posiçõs da matriz de rótulos. A
+acurácia sobe para cada letra certa em uma imagem de CAPTCHA, sem
+levar em consideração se todas as letras estão certas ou não.
 

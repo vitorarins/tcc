@@ -20,7 +20,7 @@ máquina, uma delas é a rede neural artificial.
 Redes neurais artificiais são conjuntos de modelos inspirados por
 redes neurais biológicas, usados para aproximar funções que dependem
 de um número muito grande de entradas. De acordo com Mackay\cite{Mackay},
-Redes neurais geralmente são especificadas utilizando 3 coisas:
+redes neurais geralmente são especificadas utilizando 3 coisas:
 
 \begin{itemize}
 
@@ -75,11 +75,11 @@ chamados de conjunto de treinamento. Após o treinamento o objetivo é
 receber um exemplo completamente novo e descobrir em qual classe esse
 exemplo se encaixa.
 
-Dizemos que esse aprendizado é supervisionado pois cada exemplo
-recebeu um rótulo durante o treinamento. Ao contrário deste, o
-aprendizado não supervisionado não conhece os rótulos de cada exemplo,
-mas tenta agrupar os exemplos que possuem semelhança baseado em
-propriedades úteis encontradas ao longo do treinamento.
+É dito que esse aprendizado é supervisionado pois cada exemplo
+recebeu um rótulo durante o treinamento. Já o aprendizado não
+supervisionado não conhece os rótulos de cada exemplo, mas tenta
+agrupar os exemplos que possuem semelhança baseado em propriedades
+úteis encontradas ao longo do treinamento.
 
 \subsection{Classificador Logístico}
 
@@ -96,7 +96,7 @@ classe de saída.
    WX + b = Y
 \end{equation}
 
-``X'' é como chamaremos nosso vetor das entradas, ``W'' serão pesos e
+``X'' é como chamaremos o vetor das entradas, ``W'' serão pesos e
 o termo tendencioso (\textit{bias}) será representado por ``b''. ``Y''
 corresponde ao vetor de pontuação para cada classe. Os pesos da
 matriz e o \textit{bias} é onde age o aprendizado de máquina, ou seja,
@@ -184,12 +184,12 @@ questão.
 \subsection{Treinamento}
 
 Com todas as tarefas e cálculos disponíveis, resta descobrir os
-valores dos pesos e \textit{biases} mais adequados ao nosso modelo de
+valores dos pesos e \textit{biases} mais adequados ao modelo de
 regressão.
 
 \subsubsection{Perda}
 
-Para cada valor aleatório de peso e \textit{bias}, podemos medir a
+Para cada valor aleatório de peso e \textit{bias}, é possível medir a
 distância média para todas as entradas de todo o conjunto de
 treinamento e todos rótulos que estão disponíveis. Esse valor é
 chamado de {\bf perda} do treinamento. Esta perda, que é a média de
@@ -205,7 +205,7 @@ matriz ``W''. Depois é tudo adicionado em um grande somatório.
 
 O objetivo é que as distâncias sejam minimizadas, o que significa que a
 classificação está indo bem para todos os exemplos dos dados de
-treinamento. Portanto queremos que nossa perda seja pequena. A
+treinamento. Portanto queremos que a perda seja pequena. A
 perda nada mais é que uma função em relação aos pesos e
 \textit{biases}. Assim é necessário tentar minimizar essa função,
 tornando um problema de aprendizado de máquina em um problema de
@@ -223,7 +223,7 @@ que se está querendo resolver.
 
 Já o \textit{overfitting} ocorre quando a diferença é muito grande
 entre o valor de perda para o conjunto de treinamento e o valor de
-perda para o conjunto de teste. Podemos controlar se um modelo fica
+perda para o conjunto de teste. É possível controlar se um modelo fica
 mais propenso ao \textit{overfit} ou ao \textit{underfit} alterando
 sua {\bf capacidade}. Informalmente, a capacidade de um modelo é sua
 habilidade de se encaixar em uma grande variedade de funções. Modelos
@@ -341,7 +341,7 @@ um declínio exponencial à taxa de aprendizado.\cite{Zeiler}
 
 Modelos lineares são simples e estáveis numéricamente mas podem se
 tornar ineficientes ao longo do tempo. Portanto para adicionar mais
-camadas em nosso modelo, será necessário introduzir alguns cálculos
+camadas ao modelo, será necessário introduzir alguns cálculos
 não lineares entre camadas. Em arquiteturas de profundidade, as
 funções de ativação dos neurônios se chamam ReLUs, e são capazes de
 introduzir cálculos não lineares aos modelos que possuem mais de uma
@@ -374,7 +374,7 @@ feitas de funções menores que possuem derivadas simples.
 \subsubsection{Regra da cadeia}
 
 Um motivo de construir uma rede juntando operações simples é que torna
-a matemática muito mais simples. Com a regra da cadeia podemos
+a matemática muito mais simples. Com a regra da cadeia é possível
 concluir que para calcular a derivada de funções compostas, precisamos
 apenas calcular o produto das derivadas dos componentes.
 
@@ -389,7 +389,7 @@ treinamento.
 Regularizar significa aplicar restrições artificiais em sua rede que
 fazem com que o número de parâmetros livres reduza e isso não aumente
 a dificulade para otimizar. Essa é uma das formas de previnir o
-\textit{overfitting} em nosso modelo pois adicionamos um fator externo
+\textit{overfitting} no modelo pois adicionamos um fator externo
 que torna a rede mais flexível.
 
 \subsubsection{Regularização com $L_2$}
@@ -408,7 +408,7 @@ L' = L + \beta\frac{1}{2} \norm{W}_2^2
 
 Outra forma de regularização que previne o \textit{overfitting} é o
 \textit{dropout}. Supondo que temos uma camada conectada à outra em
-nossa rede neural, os valores que vão de uma camada para a próxima
+uma rede neural, os valores que vão de uma camada para a próxima
 podem se chamar de {\bf ativações}. No \textit{dropout}, são coletadas
 todas as ativações e aleatoriamente, para cada exemplo treinado,
 atribuímos valor 0 para metade desses valores. Basicamente metade dos
@@ -492,8 +492,8 @@ profundidade. Ao invés de empilharmos camadas de multiplicação de
 matrizes, estamos empilhando convoluções. Portanto no começo teremos
 uma imagem grande que possui apenas os valores de pixel como
 informação. Assim aplicamos convoluções que irão ``espremer'' as
-dimensões espaciais e aumentar a profundidade. No final podemos
-conectar nosso classificador e podemos lidar apenas com parâmetros que
+dimensões espaciais e aumentar a profundidade. No final é possivel
+conectar o classificador e ainda lidar apenas com parâmetros que
 mapeiam o conteúdo da imagem.\cite{Dumoulin2016}
 
 \subsubsection{Stride}
@@ -523,15 +523,15 @@ e completar com 0, essa técnica é chamada de {\bf \emph{same
   \textit{stride} igual a 2 e um \textit{same padding}, completando as
   bordas com 0. Isso gera uma nova imagem 3x3 por consequência dos
   parâmetros escolhidos.}
-\label{fig:convolution_kernel}
+\label{fig:conv_kernel_pad_stride}
 \end{figure}
 
 \subsection{Pooling}
 
-Reduzir as dimensões espaciais da nossa rede neural é primordial para
+Reduzir as dimensões espaciais da rede neural é primordial para
 uma arquitetura eficaz do modelo. No entanto utilizar uma convolução
 com \textit{stride} igual a 2 para essa tarefa é uma forma agressiva e
-arriscada para isso, pois podemos perder bastante informação no
+arriscada para isso, pois é possível perder bastante informação no
 processo. Ao invés disso, iremos realizar convoluções com
 \textit{stride} igual a 1, sem perder nenhuma informação da imagem
 original. Após a camada convolucional iremos adicionar uma camada de
@@ -540,14 +540,14 @@ alguma forma\cite{Dumoulin2016}.
 
 \subsubsection{Max pooling}
 
-Para cada ponto nos nossos mapas de características essa operação
+Para cada ponto nos mapas de características essa operação
 olha para uma pequena vizinhança ao redor deste ponto. Com esses
 valores em mãos é possível calcular o valor máximo dessa vizinhança.
 
 Esta técnica geralmente leva a modelos mais eficazes. Porém a
 computação das convoluções com \textit{stride} menor pode se tornar mais
 lenta. Além disso, agora será necessário trabalhar com mais parâmetros
-para nossa rede neural, o tamanho de região de \textit{pooling} e o
+para a rede neural, o tamanho de região de \textit{pooling} e o
 parâmetro de \textit{stride} para o \textit{pooling}.
 
 \subsection{Camada completamente conectada}

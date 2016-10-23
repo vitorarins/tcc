@@ -7,8 +7,8 @@ com redes neurais. Primeiro será coletado o maior número possível de
 imagens de CAPTCHA. Em seguida será gerado um dataset com as
 características dessas imagens junto com a classe em que pertence. A
 partir daí podemos realizar a configuração e treinamento da rede
-neural. E por fim será testada a acurácia do modelo mediante imagens
-de teste.
+neural. E por fim será testada a acurácia do melhor modelo mediante
+imagens de teste.
 
 \section{Coleta de imagens}
 
@@ -25,7 +25,7 @@ catarina
 \includegraphics[scale=1]{imagens/exemplo_captcha}
 \caption{Um exemplo do CAPTCHA utilizado pelo sistema de consulta do
   SINTEGRA de Santa Catarina.}
-\label{fig:gradient_descent}
+\label{fig:exemplo_captcha}
 \end{figure}
 
 
@@ -60,15 +60,16 @@ geração do conjunto de dados.
 \begin{itemize}
 \item{\bf Escala de cinza}
 
-Ao gerar um array representativo da imagem, apenas é considerado um
-valor de escala de cinza da imagem, assim padronizando os valores de
-intensidade de pixels entre 0 e 1.
+Ao gerar um \textit{array} representativo da imagem, apenas é
+considerado um valor de escala de cinza da imagem, assim padronizando
+os valores de intensidade de pixels entre 0 e 1.
 
 \item{\bf Redimensionamento}
 
-Ao gerar o array que representa a imagem, é feito um cálculo para
-diminuir a imagem com base em uma escala. Essa escala será configurada
-à partir de um valor padrão para a largura e altura das imagens.
+Ao gerar o \textit{array} que representa a imagem, é feito um cálculo
+para diminuir a imagem com base em uma escala. Essa escala será
+configurada à partir de um valor padrão para a largura e altura das
+imagens. 
 
 \end{itemize}
 
@@ -83,22 +84,23 @@ treinamento. Portanto terá {\bf 8 mil} imagens.
 
 Após gerado o conjunto de dados, é possível trabalhar no treinamento
 do modelo da rede neural. Para isso será usado o Framework {\bf
-  TensorFlow}\cite{TensorFlow} destinado à \textit{Deep Learning} e um
-script em Python que fará uso das funções disponibilizadas pela
-biblioteca do TensorFlow. Assim realizando o treinamento até atingir
-um valor aceitável de acerto no conjunto de teste. O resultado do
-treinamento será um arquivo binário representando o modelo que será
-utilizado para avaliação posteriormente.
+  \emph{TensorFlow}}\cite{TensorFlow} destinado à \textit{Deep
+  Learning} e um script em Python que fará uso das funções
+disponibilizadas pela biblioteca do \textit{TensorFlow}. Assim
+realizando o treinamento até atingir um valor aceitável de acerto no
+conjunto de teste. O resultado do treinamento será um arquivo binário
+representando o modelo que será utilizado para avaliação
+posteriormente.
 
 \subsection{Infraestrutura}
 
 Com o intuito de acelerar o processo, foi utilizada uma
 máquina com {\bf GPU} para o treinamento. A máquina foi adquirida em
-uma \textit{Cloud} privada da AWS. A GPU utilizada se trata de uma
-\textit{NVIDIA K80} com 2.496 cores e 12GB de memória de vídeo. Como
-processador a máquina possui um \textit{Intel Xeon E5-2686v4
-  (Broadwell)} com 4 cores, e ainda possui 61GB de memória RAM
-\cite{GPUinstance}.
+uma \textit{Cloud} privada virtal da AWS. A GPU utilizada se trata de
+uma \textit{NVIDIA K80} com 2.496 cores e 12GB de memória de
+vídeo. Como processador a máquina possui um \textit{Intel Xeon
+  E5-2686v4 (Broadwell)} com 4 cores, e ainda possui 61GB de memória
+RAM \cite{GPUinstance}.
 
 \subsection{Bibliotecas utilizadas}
 
@@ -129,7 +131,7 @@ Para a avaliação, uma nova amostra de imagens será coletada do mesmo
 modo que foram coletadas as imagens para treinamento. Essa amostra
 terá uma quantidade maior de imagens do que o conjunto de teste.
 
-Com essas amostra de imagens, será feita a execução do teste do modelo
+Com essa amostra de imagens, será feita a execução do teste do modelo
 contra cada uma das imagens, assim armazenando uma informação de erro
 ou acerto do modelo. Ao final da execução será contabilizado o número
 de acertos e comparado com o número total da amostra de imagens para
