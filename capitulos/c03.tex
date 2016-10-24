@@ -1,21 +1,21 @@
-\chapter{Proposta de experimento}
+\chapter{Proposta de experimento} \label{proposta}
 
 Para realizar o experimento será necessário treinar um modelo de rede
 neural que seja capaz, ou esteja próximo, de decifrar um CAPTCHA. Para
 isso serão efetuadas três etapas básicas e comuns quando se trabalha
 com redes neurais. Primeiro será coletado o maior número possível de
-imagens de CAPTCHA. Em seguida será gerado um dataset com as
+imagens de CAPTCHA. Em seguida será gerado um \textit{dataset} com as
 características dessas imagens junto com a classe em que pertence. A
-partir daí podemos realizar a configuração e treinamento da rede
-neural. E por fim será testada a acurácia do melhor modelo mediante
-imagens de teste.
+partir daí é possível realizar a configuração e treinamento da rede
+neural. E por fim será calculada a acurácia, mediante imagens de
+teste, do modelo que teve a melhor performance no treinamento.
 
 \section{Coleta de imagens}
 
 Como o escopo do trabalho não contempla a automatização da recuperação
-de informações de websites públicos, foi disponibilizado um
+de informações de \textit{websites} públicos, foi disponibilizado um
 repositório com as imagens necessárias. Esse repositório possui
-188.564 imagens e foi disponibilizado pela empresa Neoway. As imagens
+206.564 imagens e foi disponibilizado pela empresa Neoway. As imagens
 se tratam de um CAPTCHA publicado pelo site do SINTEGRA de Santa
 catarina
 (\url{http://sistemas3.sef.sc.gov.br/sintegra/consulta_empresa_pesquisa.aspx}).
@@ -35,7 +35,7 @@ Para demonstrar a ineficiência de certas imagens de CAPTCHA foi
 escolhido um software Web. Este software do SINTEGRA, fornece dados
 públicos de contribuintes mediante consulta via website. O SINTEGRA é
 o Sistema Integrado de Informações sobre Operações Interestaduais com
-Mercadorias e Serviçoes. Esta fonte pública possui dados fornecidos
+Mercadorias e Serviços. Esta fonte pública possui dados fornecidos
 pelos próprios contribuintes na hora do cadastro. Os comerciantes ou
 profissionais autônomos fazem seu cadastro para facilitar o comércio
 de produtos e prestação de serviços. O cadastro contempla inscrição da
@@ -44,13 +44,14 @@ referentes ao fisco estadual.
 
 \section{Geração do Conjunto de dados}
 
-O conjunto de dados (ou ``dataset'') que alimenta a rede neural é
+O conjunto de dados (ou \textit{``dataset''}) que alimenta a rede neural é
 gerado em tempo de execução do treinamento. Cada imagem é lida de seu
 diretório em disco e carregada na memória como uma matriz de valores
 de pixel. Ao final deste processo há um vetor em memória com todas
-imagens existentes já pré-processadas. Isso é feito para o dataset de
-treinamento e de teste. O dataset de treinamento terá a maioria das
-imagens, portanto {\bf 180 mil}.
+imagens existentes já pré-processadas. Isso é feito para o \textit{dataset} de
+treinamento e de teste. O \textit{dataset} de treinamento terá a maioria das
+imagens, que significa {\bf 180 mil} imagens para o contexto do
+trabalho.
 
 \subsection{Pré-processamento}
 
@@ -77,30 +78,30 @@ imagens.
 
 Para o treinamento será necessário um conjunto separado para teste que
 não possui nenhuma imagem presente no conjunto de treinamento.
-O dataset de testes terá uma amostra bem menor que o conjunto de
-treinamento. Portanto terá {\bf 8 mil} imagens.
+O \textit{dataset} de testes terá uma amostra bem menor que o conjunto de
+treinamento, portanto terá {\bf 8 mil} imagens.
 
 \section{Treinamento}
 
 Após gerado o conjunto de dados, é possível trabalhar no treinamento
-do modelo da rede neural. Para isso será usado o Framework {\bf
-  \emph{TensorFlow}}\cite{TensorFlow} destinado à \textit{Deep
-  Learning} e um script em Python que fará uso das funções
-disponibilizadas pela biblioteca do \textit{TensorFlow}. Assim
-realizando o treinamento até atingir um valor aceitável de acerto no
-conjunto de teste. O resultado do treinamento será um arquivo binário
-representando o modelo que será utilizado para avaliação
-posteriormente.
+do modelo da rede neural. Para isso será usado o \textit{framework}
+{\bf \emph{TensorFlow}}\cite{TensorFlow} destinado à \textit{Deep
+  Learning}. Também será desenvolvido um \textit{script} em
+\textit{Python} que fará uso das funções disponibilizadas pela
+biblioteca do \textit{TensorFlow}. Assim realizando o treinamento até
+atingir um valor aceitável de acerto no conjunto de teste. O resultado
+do treinamento será um arquivo binário representando o modelo que será
+utilizado para avaliação posteriormente.
 
 \subsection{Infraestrutura}
 
 Com o intuito de acelerar o processo, foi utilizada uma
 máquina com {\bf GPU} para o treinamento. A máquina foi adquirida em
-uma \textit{Cloud} privada virtal da AWS. A GPU utilizada se trata de
-uma \textit{NVIDIA K80} com 2.496 cores e 12GB de memória de
-vídeo. Como processador a máquina possui um \textit{Intel Xeon
-  E5-2686v4 (Broadwell)} com 4 cores, e ainda possui 61GB de memória
-RAM \cite{GPUinstance}.
+uma \textit{Cloud} privada virtual da AWS\cite{GPUinstance}. A GPU
+utilizada se trata de uma \textit{NVIDIA K80} com 2.496 cores e 12GB
+de memória de vídeo. Como processador a máquina possui um
+\textit{Intel Xeon E5-2686v4 (Broadwell)} com 4 cores, e ainda
+possui 61GB de memória RAM.
 
 \subsection{Bibliotecas utilizadas}
 
@@ -109,10 +110,11 @@ Todo o código foi implementado utilizando a linguagem de programação
 
 \begin{itemize}
 
-\item {\bf TensorFlow}\cite{TensorFlow}: Um Framework implementado em
-  \textit{Python} destinado à \textit{Deep Learning}. Proporciona a criação da
-  arquitetura e automatização do processo de treinamento de redes
-  neurais com \textit{backpropagation}.
+\item {\bf TensorFlow}\cite{TensorFlow}: Um \textit{framework}
+  implementado em \textit{Python} destinado à \textit{Deep
+    Learning}. Proporciona a criação da arquitetura e automatização do
+  processo de treinamento de redes neurais com
+  \textit{backpropagation}.
 
 \item {\bf NumPy}\cite{NumPy}: Uma biblioteca em \textit{Python}
   criada para computação científica. Possui um objeto de

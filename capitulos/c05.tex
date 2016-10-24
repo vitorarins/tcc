@@ -3,14 +3,14 @@
 Neste capítulo são apresentados os testes realizados no sistema
 proposto com a arquitetura de rede neural definida no capítulo
 anterior. Todos os treinamentos foram realizados na infraestrutura
-citada no capítulo de proposta do trabalho. Os resultados foram
-satisfatórios para o conexto do trabalho. Para produzir os gráficos
-foi utilizada uma ferramenta chamada {\bf \emph{TensorBoard}}, que vem
-junto com a instalação do \textit{TensorFlow}.
+citada no capítulo \ref{proposta}. Os resultados foram satisfatórios
+para o contexto do trabalho. Para produzir os gráficos foi utilizada
+uma ferramenta chamada {\bf \emph{TensorBoard}}, que vem junto com a
+instalação do \textit{TensorFlow}.
 
 \section{Treinamento com 200 mil iterações}
 
-Inicialmente realizamos um treinamento com 200 mil iterações, portanto
+Inicialmente é realizado um treinamento com 200 mil iterações, portanto
 3.125 passos com uma carga de 64 imagens. A fase de treinamento
 completa levou {\bf 1 hora 23 minutos e 54 segundos} para
 completar. Deve-se salientar que para o primeiro treinamento há uma
@@ -66,7 +66,7 @@ portanto 7.812 passos. O tempo total de treinamento foi de {\bf 1 hora
 18 minutos e 23 segundos}.
 
 Analisando os gráficos gerados com este treinamento, novamente o valor
-da perda para oscila entre 16,87 e 17,51 até um certo ponto. Dessa vez
+da perda oscila entre 16,87 e 17,51 até um certo ponto. Dessa vez
 é no passo número 2.922 (iteração 187.008) onde a perda começa a
 decair. O mesmo acontece com a acurácia, ficando em torno de 6\% até o
 passo 2.977 (iteração 190.528) quando começa a subir. Ao final do
@@ -137,7 +137,7 @@ de treinamento, {\bf 1,15} para o conjunto de teste.
 
 \section{Avaliação da acurácia em casos novos} \label{acuracia}
 
-Com dito anteriormente na seção \ref{faseTeste}, o cálculo feito
+Como dito anteriormente na seção \ref{faseTeste}, o cálculo feito
 para determinar a acurácia nos casos de teste não contemplam um acerto
 completo de todas as letras em uma imagem de CAPTCHA. Por conta desse
 fator e também para testar o modelo em imagens novas, foi desenvolvido
@@ -150,7 +150,9 @@ reconhecimento de CAPTCHAs.
 O cálculo final é simples, para cada imagem em que o modelo decifra
 corretamente o texto, é incrementada uma variável {\bf acertos}. Ao
 final da execução do teste para cada imagem, é dividido o número de
-acertos pelo total de imagens fornecidas.
+acertos pelo total de imagens fornecidas. A taxa de acurácia alcançada
+ao executar a avaliação foi de {\bf 82,57\%}, ou seja {\bf 14.863}
+imagens reconhecidas completa e corretamente.
 
 \section{Resultados}
 
@@ -166,15 +168,34 @@ proposto.
 \hline
 Acurácia (teste) & {\bf 79,6\%} & {\bf 81,37\%} & {\bf 92,87\%} \\
 \hline
-Acurácia (treinamento) & 80,94\% & 97,81\% & 92,81\% \\
+Acurácia (treinamento) & 84,38\% & 98,75\% & 95,31\% \\
 \hline
 Perda (teste) & 2,91 & 13,52 & 1,15 \\
 \hline
-Perda (treinamento) & 2,87 & 0,43 & 1,39 \\
+Perda (treinamento) & 2,50 & 0,36 & 0,93 \\
 \hline
 \end{tabular}
 \caption{Desempenho geral do sistema.}
 \label{tab:system_efficency}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|p{5cm}|p{5cm}|}
+\hline
+\textbf{} & \textbf{Avaliação do modelo de 500k it. e 50\% \textit{dropout}} \\
+\hline
+Acurácia & {\bf 82,57\%} \\
+\hline
+Imagens corretamente classificadas & 14.863 \\
+\hline
+Total de imagens & 18.000 \\
+\hline
+\end{tabular}
+\caption{Avaliação em casos novos do modelo treinado com 500 mil
+  iterações e 50\% de \textit{dropout}.}
+\label{tab:system_evaluation}
 \end{center}
 \end{table}
 
@@ -185,16 +206,19 @@ foram identificados diversos casos complexos em que o modelo teve
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.8]{imagens/complex_cases}
-\caption{Exemplos de casos complexos em que o reconhecedor acertou o
-  texto completo da imagem. Na primeira imagem é possível observar a
-  semelhança entre uma letra ``g'' e o dígito ``8''. Diante da
-  proximidade entre as letras da segunda imagem, o modelo poderia ter
-  classificado a penúltima letra como um ``q'' ao invés do ``c'' que
-  foi a letra correta. Novamente percebemos a proximidade entre as
-  letras na terceira imagem. Abaixo das imagens se encontram os textos
-  reconhecidos pelo modelo em cada caso respectivamente.}
+\caption{Exemplos de casos complexos.}
 \label{fig:complex_cases}
 \end{figure}
+
+Para os casos complexos demonstrados na figura
+\ref{fig:complex_cases}, o reconhecedor acertou o texto completo da
+imagem. Na primeira imagem é possível observar a semelhança entre uma
+letra ``g'' e o dígito ``8''. Diante da proximidade entre as letras da
+segunda imagem, o modelo poderia ter classificado a penúltima letra
+como um ``q'' ao invés do ``c'' que foi a letra correta. Novamente
+é perceptível a proximidade entre as letras na terceira imagem. Abaixo
+das imagens se encontram os textos reconhecidos pelo modelo em cada
+caso respectivamente.
 
 Contudo também foram observados casos em que o modelo não teve sucesso
 no reconhecimento do texto completo. Devido a semelhança de alguns
@@ -205,14 +229,16 @@ imagens apresentadas.
 \centering
 \includegraphics[scale=0.8]{imagens/harder_cases}
 \caption{Exemplos de casos complexos em que o reconhecedor acertou
-  parcialmente texto da imagem. Na primeira imagem é possível observar
-  que o modelo confundiu a letra ``T'' maiúscula com um dígito ``4''.
-  Na segunda imagem, mesmo com a sobreposição dos caractéres ``Q'' e
-  ``r'' no meio da imagem, esses caractéres foram reconhecidos
-  corretamente. Enquanto o primeiro carctere ``t'' no início da imagem
-  foi erroneamente reconhecido como uma letra ``i''. Na terceira
-  imagem a letra ``N'' maiúscula foi reconhecida erroneamente como uma
-  letra ``x''. Abaixo das imagens se encontram os textos reconhecidos
-  pelo modelo em cada caso respectivamente.}
+  parcialmente o texto da imagem.}
 \label{fig:harder_cases}
 \end{figure}
+
+Na primeira imagem da figura \ref{fig:harder_cases} é possível observar
+que o modelo confundiu a letra ``T'' maiúscula com um dígito ``4''. Na
+segunda imagem, mesmo com a sobreposição dos caractéres ``Q'' e ``r''
+no meio da imagem, esses caractéres foram reconhecidos
+corretamente. Enquanto o primeiro carctere ``t'' no início da imagem
+foi erroneamente reconhecido como uma letra ``i''. Na terceira imagem
+a letra ``N'' maiúscula foi reconhecida erroneamente como uma letra
+``x''. Abaixo das imagens se encontram os textos reconhecidos pelo
+modelo em cada caso respectivamente.

@@ -3,15 +3,16 @@
 Este capítulo descreve o desenvolvimento do projeto proposto. 
 Para a construção e treinamento da rede neural foi implementado um
 script em \textit{Python} que possui toda a arquitetura da rede
-descrita de forma procedural. O framework \textit{TensorFlow} chama a
-arquitetura dos modelos de \textit{Graph} (ou grafo, em português) e o
-treinamento da rede neural é feito em uma \textit{Session}.
+descrita de forma procedural. O \textit{framework} \textit{TensorFlow}
+chama a arquitetura dos modelos de \textit{Graph} (ou grafo, em
+português) e o treinamento da rede neural é feito em uma
+\textit{Session}.
 
 O projeto é composto por 5 tarefas de implementação: 
 
 \begin{itemize}
 
-\item Desenvolvimento do leitor processador do conjunto de dados.
+\item Desenvolvimento do leitor e processador do conjunto de dados.
 
 \item Desenvolvimento da função que monta a rede neural.
 
@@ -35,7 +36,7 @@ de código aberto disponíveis no repositório de códigos do
 \textit{TensorFlow}\cite{tensorCode}. No repositório há diversos
 tutoriais e exemplos que incentivam o auto aprendizado dos
 usuários. Um dos exemplos mais conhecido entre a comunidade é o
-reconhecedor de dígitos da base dados MNIST\cite{mnist}.
+reconhecedor de dígitos da base de dados MNIST\cite{mnist}.
 
 O reconhecedor utilizado como base funciona apenas para dígitos
 isolados em imagens separadas. Para o caso do trabalho em questão
@@ -48,7 +49,7 @@ antes do treinamento.
 Para a leitura das imagens e pré-processamento do conjunto de dados, foi
 implementada uma classe chamada \textit{OCR\_data}. Esta classe utiliza
 a memória RAM para armazenar o conjunto de dados enquanto é processado
-pelo treinamento. Para Inicialização da classe, são necessários alguns
+pelo treinamento. Para inicialização da classe, são necessários alguns
 parâmetros:
 
 \begin{itemize}
@@ -58,7 +59,7 @@ parâmetros:
   \item Número de classes que um caractere pode ter. Para o caso do
     trabalho esse número é igual a 36 pois cada caractere do CAPTCHA
     utilizado como exemplo pode ser somente uma letra minúscula sem
-    acentos de ``a'' à ``z'' (26 letras) ou um número de ``0'' à ``9''
+    acentos de ``a'' a ``z'' (26 letras) ou um dígito de ``0'' a ``9''
     (10 dígitos).
   \item Tamanho da fração dos dado para cada iteração com treinamento.
   \item Tamanho da palavra contida no CAPTCHA. 5 para nosso caso.
@@ -74,37 +75,37 @@ parâmetros:
 \subsection{Leitura das imagens}
 
 As imagens são carregadas utilizando \textit{OpenCV}\cite{OpenCV} com
-o método \textit{imread}. Após a leitura precisamos fixar o seu rótulo
+o método \textit{imread}. Após a leitura é preciso fixar o seu rótulo
 para a utilização no treinamento. Como as imagens já estão nomeadas
-com o respectivo conteúdo da sua imagem, só o que precisamos fazer é
-um vetor utilizável desse texto. 
+com o respectivo conteúdo da sua imagem, só o que é preciso fazer é
+gerar um vetor utilizável desse texto. 
 
-Primeiro transformamos cada caractere em um número de 0 à 35. Fazemos
-isso recuperando o código ASCII de cada caractere e normalizando a
-sequência. Portanto, para os dígitos (0 à 9) que possuem códigos indo
-de 48 à 57, subtraímos 48. E para as letras (a à z) que possuem
-códigos indo de 97 à 122, subtraímos 87 e ficamos com números de 10 à
-35. 
+Primeiro é transformado cada caractere em um número de 0 a 35. Isso é
+feito recuperando o código ASCII de cada caractere e normalizando a
+sequência. Portanto, para os dígitos (0 a 9) que possuem códigos indo
+de 48 a 57, é subtraído 48. E para as letras (a a z) que possuem
+códigos indo de 97 a 122, é subtraído 87 e assim resultando em números
+de 10 a 35.
 
-Depois de traduzido o caractere para um número, precisamos criar o
-vetor do rótulo através do nosso algoritmo de \textit{One-hot
-  encoding}. Para isso criamos 5 vetores, um para cada caractere da
-imagem, e cada vetor possui 36 posições. Completamos todas as posições
-com 0 e em seguida é atribuído o número 1 para a posição referente ao
-carctér. A posição do caractere foi determinada pelo passo anterior,
-sendo igual o número correspondente ao caractere.
+Depois de traduzido o caractere para um número, é preciso criar o
+vetor do rótulo através do algoritmo de \textit{One-hot
+  encoding}. Para isso são criados 5 vetores, um para cada caractere
+da imagem, e cada vetor possui 36 posições. Todas as posições são
+completadas com 0 e em seguida é atribuído o número 1 para a posição
+referente ao caractere. A posição do caractere foi determinada pelo
+passo anterior, sendo igual ao número correspondente ao caractere.
 
-\subsubsection{Fraçao dos dados para treinamento}
+\subsubsection{Fração dos dados para treinamento}
 
 Como em cada iteração do treinamento será recuperado apenas uma fração
 dos dados, foi criado um método \textit{next\_batch} na classe
 \textit{OCR\_data}. Outra motivação para este método é a necessidade de
 recuperar uma amostra aleatória dos dados em cada iteração. 
 
-Portanto temos uma variável global na classe \textit{OCR\_data} que
-mantém o estado da posição que estamos no conjunto de dados. Após
-passar por todo o conjunto de dados, nosso método começa a fazer feita
-uma permutação aleatória para garantir que as posições recuperadas do
+Portanto há uma variável global na classe \textit{OCR\_data} que
+mantém o estado da posição que se encontra o conjunto de dados. Após
+passar por todo o conjunto de dados, o método começa a fazer uma
+permutação aleatória para garantir que as posições recuperadas do
 conjunto de dados sejam completamente escolhidas ao acaso.
 
 \subsection{Pré-processamento das imagens}
@@ -112,48 +113,48 @@ conjunto de dados sejam completamente escolhidas ao acaso.
 Como foi dito anteriormente, a fase de pré-processamento é mínima e
 requer apenas alguns parâmetros. Essa etapa é necessária para garantir
 uma velocidade maior no treinamento e também garantir uma eficiência
-maior como veremos a seguir.
+maior como será visto a seguir.
 
 \subsubsection{Quantidade de canais de cor}
 
-No contexto do trabalho, não nos importamos com a cor de um caractere
-da imagem. Uma letra ``A'' pode ser vermelha, azul ou verde mas ainda
-terá que ser reconhecido como letra ``A''. Com isso em mente podemos
-reduzir a quantidade de informações que nosso modelo precisa
-aprender. É reduzido também a complexidade dos cálculos feitos pelo
-modelo. Quando fazemos a leitura da imagem com a biblioteca OpenCV,
-indicamos um parâmetro que diz que a imagem deve ser lida em escala de
+No contexto do trabalho, a cor de um caractere da imagem não
+importa. Uma letra ``A'' pode ser vermelha, azul ou verde mas ainda 
+terá que ser reconhecido como letra ``A''. Com isso em mente é
+possível reduzir a quantidade de informações que o modelo precisa
+aprender. É reduzida também a complexidade dos cálculos feitos pelo
+modelo. Quando é feita a leitura da imagem com a biblioteca OpenCV,
+indica-se um parâmetro que diz que a imagem deve ser lida em escala de
 cinza (\textit{IMREAD\_GRAYSCALE}). A escala de cinza de uma imagem
 representa para cada valor de pixel uma média dos valores de cor RGB
 da imagem. Para cada pixel é somado o valor de vermelho com os valores
-de verde e azul e dividido por 3. Com isso podemos normalizar nossos
+de verde e azul e dividido por 3. Com isso é possível normalizar os
 dados de entrada para um valor entre 0 e 1, onde 0 seria um ponto
 completamente preto e 1 seria branco.
 
 \subsubsection{Tamanho da imagem}
 
 Outro modo de reduzir informações desnecessárias é redimensionando a
-imagem. Com a biblioteca \textit{OpenCV} fazemos isso invocando a
-função \textit{resize}. Nessa função passamos como parâmetro a largura
+imagem. Com a biblioteca \textit{OpenCV} isso é feito invocando a
+função \textit{resize}. Nessa função é passado como parâmetro a largura
 e altura alvos, assim como o algoritmo que deve ser usado para a
 interpolação\footnote{Interpolação se trata do algoritmo utilizado
   para redimensionar a imagem. Esse algoritmo irá interpolar cada
   valor de pixel da imagem para obter uma nova imagem
-  redimensionada.}. Foi escolhido tamanho de 88 de largura por 24 de
-altura pois esses valores correspondem a mais ou menos metade da
-imagem. Na seção de arquitetura da rede, também veremos que esses
-valores se encaixarão mais naturalmente no nosso modelo. Como
+  redimensionada.}. Foi escolhido o tamanho de 88 de largura por 24 de
+altura, pois esses valores correspondem a mais ou menos metade da
+imagem. Na seção de arquitetura da rede, também será visto que esses
+valores se encaixarão mais naturalmente no modelo. Como
 algoritmo de interpolação foi escolhido a reamostragem utilzando a
 relação da área de pixel (opção \textit{INTER\_AREA} do
 \textit{OpenCV}). Este algoritmo é o indicado pela própria biblioteca
 para reduzir imagens. Agora com menos dados a ser processados o
 treinamento terá uma velocidade maior.
 
-Ao final da geração de conjunto de dados criamos dois \textit{arrays}
+Ao final da geração de conjunto de dados são criados dois \textit{arrays}
 multidimensionais com a biblioteca \textit{NumPy}. Um \textit{array} é das
 imagens e terá a forma $quantidade\_de\_imagens\ x\ 88\ x\ 24\ x\ 1$,
 sendo a quantidade fornecida como parâmetro, 88 x 24 a largura e
-altura da imagem, e 1 é nossa quantidade de canais de cor (ou
+altura da imagem, e 1 é a quantidade de canais de cor (ou
 profundidade). O outro \textit{array} é para os rótulos e terá a forma
 $quantidade\_de\_imagens\ x\ 180$, sendo a quantidade fornecida como
 parâmetro e 180 o tamanho do vetor do rótulo pois se trata de 36
@@ -185,15 +186,16 @@ camada de \textit{dropout}, resultando em um total de 14 camadas sendo
 
 \subsection{Entradas}
 
-Nosso grafo começa com dois parâmetros de entrada, as imagens de
-entrada e os rótulos correspondentes. Para esses parâmetros criamos
-\textit{placeholders} disponibilizados pelo framework. Esses
-\textit{placeholders} inicialmente precisam saber qual tipo dos dados
-serão inseridos e o formato final. O tipo dos dados são os valores
-normalizados dos pixels das imagens portanto serão pontos
-flutuantes. O formato é o que foi definido em nossa classe do conjunto
-dos dados ($quantidade\_de\_imagens\ x\ 88\ x\ 24\ x\ 1$ para as
-imagens e $quantidade\_de\_imagens\ x\ 180$ para os rótulos).
+O grafo da arquitetura começa com dois parâmetros de entrada, as
+imagens de entrada e os rótulos correspondentes. Para esses parâmetros
+são criados \textit{placeholders} disponibilizados pelo
+\textit{framework}. Esses \textit{placeholders} inicialmente precisam
+saber qual tipo dos dados serão inseridos e o formato final. O tipo
+dos dados são os valores normalizados dos pixels das imagens, portanto
+serão pontos flutuantes. O formato é o que foi definido na
+classe do conjunto dos dados ($quantidade\_de\_imagens\ x\ 88\ x\ 24\
+x\ 1$ para as imagens e $quantidade\_de\_imagens\ x\ 180$ para os
+rótulos).
 
 \subsection{Camadas}
 
@@ -205,7 +207,7 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
 \item Camada de entrada: um \textit{array} multidimensional de formato
   {\bf 88x24x1} que será alimentado com os valores da imagem.
 
-\item Camada convolucional (1): tem como entrada a imagem carregada na
+\item 1ª Camada convolucional: tem como entrada a imagem carregada na
   camada de entrada com {\bf 1} de profundidade. Executa convoluções
   aplicadas à imagem com um \textit{kernel} de formato $5x5$ e {\bf
     64} valores de profundidade. Seu valor de \textit{stride} é igual
@@ -213,18 +215,18 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   \textit{bias} de {\bf 64} valores à convolução. O formato do \textit{array}
   multidimensional desta camada é {\bf 88x24x64}.
 
-\item Camada oculta (1): utiliza {\bf ReLU} como função de ativação e
+\item 1ª Camada oculta: utiliza {\bf ReLU} como função de ativação e
   não recebe nenhum parâmetro. Tem como entrada a camada convolucional
   anterior.
 
-\item Camada de \textit{pooling} (1): executa a operação de
+\item 1ª Camada de \textit{pooling}: executa a operação de
   \textit{max pooling} com um \textit{kernel} de formato $2x2$ e
   \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
   imagem gerada pelas convoluções após passar pela função de
   ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
   formato do \textit{array} multidimensional desta camada é {\bf 44x12x64}.
 
-\item Camada convolucional (2): tem como entrada a imagem gerada
+\item 2ª Camada convolucional: tem como entrada a imagem gerada
   nas camadas anteriores com {\bf 64} de profundidade. Executa
   convoluções aplicadas à imagem com um \textit{kernel} de formato
   $5x5$ e {\bf 128} valores de profundidade. Seu valor de
@@ -233,18 +235,18 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   valores à convolução. O formato do \textit{array} multidimensional desta
   camada é {\bf 44x12x128}.
 
-\item Camada oculta (2): utiliza {\bf ReLU} como função de ativação e
+\item 2ª Camada oculta: utiliza {\bf ReLU} como função de ativação e
   não recebe nenhum parâmetro. Tem como entrada a camada convolucional
   anterior.
 
-\item Camada de \textit{pooling} (2): executa a operação de
+\item 2ª Camada de \textit{pooling}: executa a operação de
   \textit{max pooling} com um \textit{kernel} de formato $2x2$ e
   \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
   imagem gerada pelas convoluções após passar pela função de
   ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
   formato do \textit{array} multidimensional desta camada é {\bf 22x6x128}.
 
-\item Camada convolucional (3): tem como entrada a imagem gerada
+\item 3ª Camada convolucional: tem como entrada a imagem gerada
   nas camadas anteriores com {\bf 128} de profundidade. Executa
   convoluções aplicadas à imagem com um \textit{kernel} de formato
   $5x5$ e {\bf 256} valores de profundidade. Seu valor de
@@ -253,18 +255,18 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   valores à convolução. O formato do \textit{array} multidimensional desta
   camada é {\bf 22x6x256}.
 
-\item Camada oculta (3): utiliza {\bf ReLU} como função de ativação e
+\item 3ª Camada oculta: utiliza {\bf ReLU} como função de ativação e
   não recebe nenhum parâmetro. Tem como entrada a camada convolucional
   anterior.
 
-\item Camada de \textit{pooling} (2): executa a operação de
+\item 3ª Camada de \textit{pooling}: executa a operação de
   \textit{max pooling} com um \textit{kernel} de formato $2x2$ e
   \textit{stride} igual a {\bf 2}. Essa operação tem como entrada a
   imagem gerada pelas convoluções após passar pela função de
   ativação. Isso irá reduzir o tamanho desta imagem pela metade. O
   formato do \textit{array} multidimensional desta camada é {\bf 11x3x256}.
 
-\item Camada convolucional (4): tem como entrada a imagem gerada
+\item 4ª Camada convolucional: tem como entrada a imagem gerada
   nas camadas anteriores com {\bf 256} de profundidade. Executa
   convoluções aplicadas à imagem com um \textit{kernel} de formato
   $3x3$ e {\bf 512} valores de profundidade. Seu valor de
@@ -274,17 +276,17 @@ cada camada utilizada por ordem de sequência da entrada até a saída.
   camada é {\bf 11x3x512}.
 
 \item Camada de \textit{dropout}: tem como entrada a camada
-  convolucional anterior e possui um formato {\bf 11x3x512}. Recebe o
-  valor de {\bf 0.75} como parâmetro de probabilidade de manter cada
-  peso da rede neural.
+  convolucional anterior e possui um formato {\bf 11x3x512}. Recebe
+  como parâmetro um valor de probabilidade de manter cada peso da rede
+  neural.
 
 \item Camada completamente conectada: tem como entrada todas as
-  ativações das camadas anteriores. Para habilitar nossa camada
-  completamente conectada precisamos realizar uma reformatação na
+  ativações das camadas anteriores. Para habilitar a camada
+  completamente conectada é preciso realizar uma reformatação na
   matriz de entrada. Como a última camada possui um formato de {\bf
     11x3x512}, multiplica-se esses valores para que ao invés de
   ter uma matriz, tenha-se um vetor de tamanho {\bf 16896} como
-  entrada. Assim nossa camada completamente conectada terá {\bf 16896}
+  entrada. Assim a camada completamente conectada terá {\bf 16896}
   ativações de entrada e {\bf 4096} ativações de saída.
 
 \item Camadas completamente conectadas de saída: cada camada terá como
@@ -314,11 +316,11 @@ redes convolucionais\cite{Krizhevsky}.
 
 \subsection{Tamanho do Kernel}
 
-Baseado nos estudos de \cite{Goodfellow}, foi escolhido um formato
+Baseado em estudos anteriores\cite{Goodfellow}, foi escolhido um formato
 de $5x5$ para o tamanho do \textit{kernel} para a maioria das
 camadas. Para a última camada convolucional foi escolhido o tamanho
 de $3x3$ pois o \textit{kernel} não pode ter uma dimensão maior que
-a imagem de entrada. Como na última camada recebemos uma imagem no
+a imagem de entrada. Como na última camada é recebida uma imagem no
 formato $11x3$, não é possivel aplicar convoluções de tamanho $5x5$.
 
 \subsection{Parâmetros do declínio exponencial da taxa de aprendizado}
@@ -326,7 +328,7 @@ formato $11x3$, não é possivel aplicar convoluções de tamanho $5x5$.
 Ao utilizar uma taxa de aprendizado decadente no otimizador, são
 fornecidos alguns parâmetros relativos ao processo de decadência da
 taxa. Os valores fornecidos tem como base um dos treinamentos de rede
-neural disponível em \cite{tensorCode}.
+neural disponível em exemplos e tutoriais mencionados\cite{tensorCode}.
 
 \begin{itemize}
   
@@ -348,7 +350,7 @@ neural disponível em \cite{tensorCode}.
 
 \subsection{Momentum}
 
-A estratégia de \textit{momentum} de nosso treinamento precisa de uma
+A estratégia de \textit{momentum} do treinamento precisa de uma
 variável que será o fator determinante para o cálculo do gradiente. O
 valor dessa variável recomendado pela maioria dos estudos e exemplos é
 igual a {\bf 0,9} e é o valor utilizado no treinamento proposto.
@@ -393,7 +395,7 @@ haverá {\bf 3.125} ($200.000 / 64$) passos e para os outros haverá
 
 \section{Fase de treinamento} \label{treino}
 
-A fase de treinamento é o momento onde se junta todas as peças da
+A fase de treinamento é o momento onde se juntam todas as peças da
 arquitetura e configuração da rede neural. Na implementação foi
 criada uma função \textit{train} que é responsável por montar de fato
 o grafo para a rede e utilizar o objeto \textit{Session} do
